@@ -7,6 +7,10 @@ urlpatterns = [
     # Dashboard
     path('', views.dashboard, name='dashboard'),
 
+    # Navigation tab aliases
+    path('connections/', views.marketplace_connections_list, name='connections'),
+
+
     # MarketplaceConnection
     path('marketplace_connections/', views.marketplace_connections_list, name='marketplace_connections_list'),
     path('marketplace_connections/add/', views.marketplace_connection_add, name='marketplace_connection_add'),
