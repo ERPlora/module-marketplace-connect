@@ -29,3 +29,16 @@ PERMISSIONS = [
 'marketplace_connect.delete_marketplaceconnection',
 'marketplace_connect.manage_settings',
 ]
+
+ROLE_PERMISSIONS = {
+    "admin": ["*"],
+    "manager": [
+        "add_marketplaceconnection",
+        "change_marketplaceconnection",
+        "view_marketplaceconnection",
+    ],
+    "employee": [
+        "add_marketplaceconnection",
+        "view_marketplaceconnection",
+    ],
+}
