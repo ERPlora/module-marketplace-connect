@@ -1,57 +1,151 @@
-# Marketplace Connectors Module
+# Marketplace Connectors
 
-Connect to Amazon, eBay, Shopify and other marketplaces.
+## Overview
 
-## Features
-
-- Connect to external marketplaces (Amazon, eBay, Shopify, and others)
-- Manage multiple marketplace connections per hub
-- Connection status tracking: connected, disconnected, and error states
-- API key storage for secure marketplace authentication
-- Enable/disable sync per connection
-- Last sync timestamp tracking for monitoring
-- Flexible JSON configuration per connection for marketplace-specific settings
-
-## Installation
-
-This module is installed automatically via the ERPlora Marketplace.
-
-## Configuration
-
-Access settings via: **Menu > Marketplace Connectors > Settings**
-
-## Usage
-
-Access via: **Menu > Marketplace Connectors**
-
-### Views
-
-| View | URL | Description |
-|------|-----|-------------|
-| Dashboard | `/m/marketplace_connect/dashboard/` | Overview of marketplace connections and sync status |
-| Connections | `/m/marketplace_connect/connections/` | Manage marketplace connections |
-| Settings | `/m/marketplace_connect/settings/` | Module configuration |
+| Property | Value |
+|----------|-------|
+| **Module ID** | `marketplace_connect` |
+| **Version** | `1.0.0` |
+| **Icon** | `globe-outline` |
+| **Dependencies** | None |
 
 ## Models
 
-| Model | Description |
-|-------|-------------|
-| `MarketplaceConnection` | Marketplace integration with name, marketplace type, status, API key, sync toggle, last sync timestamp, and JSON config |
+### `MarketplaceConnection`
+
+MarketplaceConnection(id, hub_id, created_at, updated_at, created_by, updated_by, is_deleted, deleted_at, marketplace, name, status, api_key, last_sync_at, sync_enabled, config)
+
+| Field | Type | Details |
+|-------|------|---------|
+| `marketplace` | CharField | max_length=50 |
+| `name` | CharField | max_length=255 |
+| `status` | CharField | max_length=20, choices: connected, disconnected, error |
+| `api_key` | CharField | max_length=255, optional |
+| `last_sync_at` | DateTimeField | optional |
+| `sync_enabled` | BooleanField |  |
+| `config` | JSONField | optional |
+
+## URL Endpoints
+
+Base path: `/m/marketplace_connect/`
+
+| Path | Name | Method |
+|------|------|--------|
+| `(root)` | `dashboard` | GET |
+| `connections/` | `connections` | GET |
+| `marketplace_connections/` | `marketplace_connections_list` | GET |
+| `marketplace_connections/add/` | `marketplace_connection_add` | GET/POST |
+| `marketplace_connections/<uuid:pk>/edit/` | `marketplace_connection_edit` | GET |
+| `marketplace_connections/<uuid:pk>/delete/` | `marketplace_connection_delete` | GET/POST |
+| `marketplace_connections/bulk/` | `marketplace_connections_bulk_action` | GET/POST |
+| `settings/` | `settings` | GET |
 
 ## Permissions
 
 | Permission | Description |
 |------------|-------------|
-| `marketplace_connect.view_marketplaceconnection` | View marketplace connections |
-| `marketplace_connect.add_marketplaceconnection` | Create new connections |
-| `marketplace_connect.change_marketplaceconnection` | Edit existing connections |
-| `marketplace_connect.delete_marketplaceconnection` | Delete connections |
-| `marketplace_connect.manage_settings` | Manage module settings |
+| `marketplace_connect.view_marketplaceconnection` | View Marketplaceconnection |
+| `marketplace_connect.add_marketplaceconnection` | Add Marketplaceconnection |
+| `marketplace_connect.change_marketplaceconnection` | Change Marketplaceconnection |
+| `marketplace_connect.delete_marketplaceconnection` | Delete Marketplaceconnection |
+| `marketplace_connect.manage_settings` | Manage Settings |
 
-## License
+**Role assignments:**
 
-MIT
+- **admin**: All permissions
+- **manager**: `add_marketplaceconnection`, `change_marketplaceconnection`, `view_marketplaceconnection`
+- **employee**: `add_marketplaceconnection`, `view_marketplaceconnection`
 
-## Author
+## Navigation
 
-ERPlora Team - support@erplora.com
+| View | Icon | ID | Fullpage |
+|------|------|----|----------|
+| Dashboard | `speedometer-outline` | `dashboard` | No |
+| Connections | `globe-outline` | `connections` | No |
+| Settings | `settings-outline` | `settings` | No |
+
+## AI Tools
+
+Tools available for the AI assistant:
+
+### `list_marketplace_connections`
+
+List marketplace connections (Amazon, eBay, etc.).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `status` | string | No |  |
+| `marketplace` | string | No |  |
+
+### `get_marketplace_connection`
+
+Get detailed marketplace connection info.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `connection_id` | string | Yes | Connection ID |
+
+### `toggle_marketplace_sync`
+
+Enable or disable sync for a marketplace connection.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `connection_id` | string | Yes | Connection ID |
+| `enabled` | boolean | Yes | Enable (true) or disable (false) sync |
+
+## File Structure
+
+```
+README.md
+__init__.py
+admin.py
+ai_tools.py
+apps.py
+forms.py
+locale/
+  en/
+    LC_MESSAGES/
+      django.po
+  es/
+    LC_MESSAGES/
+      django.po
+migrations/
+  0001_initial.py
+  __init__.py
+models.py
+module.py
+static/
+  icons/
+    icon.svg
+  marketplace_connect/
+    css/
+    js/
+templates/
+  marketplace_connect/
+    pages/
+      connections.html
+      dashboard.html
+      index.html
+      marketplace_connection_add.html
+      marketplace_connection_edit.html
+      marketplace_connections.html
+      settings.html
+    partials/
+      connections_content.html
+      dashboard_content.html
+      marketplace_connection_add_content.html
+      marketplace_connection_edit_content.html
+      marketplace_connections_content.html
+      marketplace_connections_list.html
+      panel_marketplace_connection_add.html
+      panel_marketplace_connection_edit.html
+      settings_content.html
+tests/
+  __init__.py
+  conftest.py
+  test_models.py
+  test_views.py
+urls.py
+views.py
+```
